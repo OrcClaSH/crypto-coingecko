@@ -1,0 +1,44 @@
+@import '@/assets/scss/variables';
+
+.coin-detail {
+
+    &__info {
+        margin-top: 12px;
+
+        &-text,
+        &-text span {
+            font-size: 12px;
+            color: $color-gray-subtitle
+        }
+    }
+
+    &__description {
+        margin-top: 10px;
+        font-weight: 450;
+        font-size: 12px;
+        max-height: 100px;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+
+        a {
+            color: blue;
+        }
+
+        &-btn {
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+            transition: color .2s;
+        }
+
+        &-btn:hover {
+            color: blue;
+        }
+
+        &--active {
+            max-height: 2000px;
+            transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+        }
+    }
+}
+

@@ -1,0 +1,44 @@
+@import '@/assets/scss/_variables';
+
+.coin-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+
+    &-btn {
+        font-size: 24px;
+        border: none;
+        margin-right: 16px;
+        cursor: pointer
+    }
+
+    &-logo {
+        width: 24px;
+        height: 24px;
+        object-fit: cover;
+        margin-right: 8px;
+    }
+
+    &-title {
+        font-size: 16px;
+        font-weight: 450;
+        line-height: 20px;
+        margin-right: 4px;
+        text-shadow: $shadow-text;
+    }
+
+    &-subtitle {
+        margin-right: 12px;
+        padding-top: 5px;
+        font-size: 10px;
+        font-weight: 450;
+        line-height: 13px;
+        color: $color-gray-subtitle;
+    }
+
+    &-logo--favorite {
+        width: 16px;
+        height: 16px;
+        cursor: pointer
+    }
+}

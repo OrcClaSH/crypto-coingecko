@@ -1,0 +1,20 @@
+@import '@/assets/scss/variables';
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    &__btn {
+        font-size: 1.2rem;
+        border: none;
+        cursor: pointer;
+
+    }
+
+    &__page {
+        font-weight: 700;
+        text-shadow: $shadow-text;
+    }
+}

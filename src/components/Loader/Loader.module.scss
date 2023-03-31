@@ -1,0 +1,28 @@
+.loader {
+    animation: rotate 1s infinite linear;
+
+    &-l {
+        width: 60px;
+        height: 60px;
+    }
+
+    &-m {
+        width: 40px;
+        height: 40px;
+    }
+
+    &-s {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

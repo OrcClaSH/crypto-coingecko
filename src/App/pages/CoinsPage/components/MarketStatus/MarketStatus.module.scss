@@ -1,0 +1,32 @@
+@import '@/assets/scss/variables';
+
+.market-status {
+
+    &__title,
+    &__value {
+        display: inline;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 25px;
+        text-shadow: $shadow-text;
+    }
+
+    &__title {
+        margin-right: .5rem;
+    }
+
+    &__subtitle {
+        font-weight: 450;
+        font-size: 12px;
+        line-height: 15px;
+        color: $color-gray-subtitle;
+    }
+
+    &--up {
+        color: #21BF73;
+    }
+
+    &--down {
+        color: #D90429;
+    }
+}

@@ -1,0 +1,13 @@
+@import '@/assets/scss/_variables';
+
+.coin-detail {
+
+    &__graph {
+        width: 375px;
+        height: 300px;
+        min-width: 300px;
+        align-self: flex-end;
+        margin-bottom: 15px;
+
+    }
+}

@@ -1,0 +1,52 @@
+@import '@/assets/scss/variables';
+
+.error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &__title {
+        color: red;
+    }
+
+    &__title,
+    &__link,
+    &__text--red {
+        text-shadow: $shadow-text;
+    }
+
+    &__message {
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+    }
+
+    &__text {
+        margin-bottom: 1rem;
+
+        &--red {
+            font-size: 1.3rem;
+            color: red;
+        }
+    }
+
+
+    &__btn {
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        min-width: 165px;
+        font-weight: 700;
+        box-shadow: $shadow;
+
+        &-timer {
+            display: inline-block;
+            min-width: 60px;
+            font-size: 2rem;
+            color: blue;
+        }
+    }
+
+    &__link {
+        color: blue;
+    }
+}

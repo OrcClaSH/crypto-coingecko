@@ -1,0 +1,16 @@
+@import '@/assets/scss/variables';
+
+.coins-dropdown {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .7rem;
+
+    &__title {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 23px;
+        color: $color-black;
+        text-shadow: $shadow-text;
+    }
+}

@@ -1,0 +1,46 @@
+@import '@/assets/fonts/CircularStd/fonts.scss';
+@import '@/assets/fonts/Roboto/fonts.scss';
+@import 'variables';
+@import 'libs/normalize';
+
+body {
+    font-family: 'Circular Std';
+    background-color: $color-background;
+}
+
+.wrapper {
+    padding: 10px;
+    margin: 0 auto;
+    max-width: 397px;
+    min-height: 500px;
+    border: 1px solid orange;
+    overflow: hidden;
+}
+
+// hints
+*[data-hint] {
+    position: relative;
+}
+
+*[data-hint]:hover:after {
+    visibility: visible;
+    transform: translate(-50%, -100%);
+}
+
+*[data-hint]:after {
+    visibility: hidden;
+    position: absolute;
+    transition: transform .2s ease;
+    top: -3px;
+    left: 50%;
+    z-index: 2;
+    transform: translate(-50%, 0%);
+    background-color: $color-blue;
+    color: #fff;
+    content: attr(data-hint);
+    display: inline-block;
+    padding: 3px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    line-height: 0.8em;
+}

@@ -1,0 +1,41 @@
+@import '@/assets/scss/variables';
+
+.params {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: .7rem;
+    font-size: .7rem;
+
+
+    &__items {
+        display: flex;
+        gap: 5px;
+        font-weight: 450;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 2px 8px;
+        background-color: $color-white;
+        border-radius: 8px;
+        box-shadow: inset $shadow;
+
+        &-title {
+            color: $color-gray-subtitle;
+        }
+
+        &--delete {
+            font-size: 1rem;
+            color: $color-blue;
+            text-shadow: $shadow-text;
+
+            &:hover {
+                color: red;
+                cursor: pointer;
+            }
+        }
+    }
+}

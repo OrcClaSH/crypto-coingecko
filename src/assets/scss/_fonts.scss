@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'datcub';
+    src: url('../fonts/Datcub.woff2') format('woff2'),
+         url('../fonts/Datcub.ttf') format('truetype'),
+         url('../fonts/Datcub.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'datcub';
+    src: url('../fonts/DatcubBold.woff2') format('woff2'),
+         url('../fonts/DatcubBold.ttf') format('truetype'),
+         url('../fonts/DatcubBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'datcub';
+    src: url('../fonts/DatcubLight.woff2') format('woff2'),
+         url('../fonts/DatcubLight.ttf') format('truetype'),
+         url('../fonts/DatcubLight.woff') format('woff');
+    font-weight: normal;
+    font-style: light;
+}

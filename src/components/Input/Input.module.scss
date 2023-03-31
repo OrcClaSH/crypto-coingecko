@@ -1,0 +1,37 @@
+@import '@/assets/scss/variables';
+
+.input {
+    font-family: 'Circular Std';
+    width: 368px;
+    padding: 12px 10px;
+    font-weight: 450;
+    font-size: 12px;
+    line-height: 15px;
+    border: 1px solid $color-gray;
+    border-radius: 4px;
+    outline: none;
+
+    &::placeholder {
+        color: $color-gray;
+    }
+
+    &:focus {
+        border: 1px solid $color-gray-subtitle;
+    }
+
+    &:disabled {
+        background-color: $color-white;
+        opacity: .8;
+    }
+
+    &__clear {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+
+        &:hover {
+            color: red;
+        }
+    }
+}

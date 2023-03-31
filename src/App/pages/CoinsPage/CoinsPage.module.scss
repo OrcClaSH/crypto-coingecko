@@ -1,0 +1,11 @@
+@import '@/assets/scss/variables';
+
+.coins {
+
+    &__items {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+}
