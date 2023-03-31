@@ -60,7 +60,6 @@ export default class ApiStore implements IApiStore {
                     status: response.status,
                 };
             } else {
-                console.log('apiStore', response.status)
                 const error = new Error(response.status.toString(), response.data)
                 return {
                     success: false,
