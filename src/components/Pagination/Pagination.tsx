@@ -4,9 +4,13 @@ import { observer } from "mobx-react-lite";
 import rootStore from "@/store/RootStore/instance";
 
 import st from './Pagination.module.scss';
+import { useStoresContext } from "@/App/pages/Home/Home";
+import { API_ENDPOINTS } from "@/config";
 
 const Pagination: FC = () => {
     const pageNow = rootStore.query.paramsFromStores.page || 1
+    const coinsNumber = useStoresContext().coins.coins.length
+    const perPage = rootStore.query.paramsFromStores.per_page || API_ENDPOINTS.PER_PAGE
 
     return (
         <div className={st.pagination}>
@@ -21,6 +25,7 @@ const Pagination: FC = () => {
             <button
                 className={st.pagination__btn}
                 onClick={() => rootStore.query.setParamsFromStores({ page: (+pageNow + 1).toString() })}
+                disabled={+perPage > coinsNumber}
             >
                 &#62;
             </button>

@@ -4,7 +4,6 @@ import {
     computed,
     action,
     runInAction,
-    toJS,
 } from 'mobx';
 
 import { API_ENDPOINTS, SORT_TYPES, VS_CURRENCY_DEFAULT } from '@/config';
@@ -28,14 +27,14 @@ import rootStore from '../RootStore';
 import { Option } from '@/components/MultiDropdown/MultiDropdown';
 
 type PrivateFields =
+    | '_meta'
+    | '_page'
     | '_categories'
     | '_currencies'
-    | '_meta'
+    | '_searchValue'
     | '_selectedCurrency'
     | '_selectedCategory'
-    | '_searchValue'
     | '_activeFeaturedCategory'
-    | '_page';
 
 export default class FiltersStore implements ILocalStore {
     private readonly _apiStore = new ApiStore(API_ENDPOINTS.BASE_URL);
@@ -124,8 +123,8 @@ export default class FiltersStore implements ILocalStore {
             } else {
                 this._selectedCategory = [category];
             }
-            const params: {category: string, page?: string} =
-                {category: this._selectedCategory.map(item => item.key).join(',')}
+            const params: { category: string, page?: string } =
+                { category: this._selectedCategory.map(item => item.key).join(',') }
             if (isResetPage) params.page = '1'
             rootStore.query.setParamsFromStores(params)
         })
