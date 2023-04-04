@@ -68,7 +68,7 @@ export default class ApiStore implements IApiStore {
                 };
             }
         } catch (error) {
-            console.log('[ERROR apiStore]', error)
+            // console.log('[ERROR apiStore]', error)
             rootStore.error.setErrorText((error as Error).message)
             return {
                 success: false,

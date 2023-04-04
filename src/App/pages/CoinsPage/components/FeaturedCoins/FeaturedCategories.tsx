@@ -13,7 +13,7 @@ const FeaturedCategories: FC = () => {
     const activeFilter = filtersStore.selectedFeatureCategory
     const setActiveFilter = filtersStore.setActiveFeaturedCategory
     const isSearchValue = Boolean(filtersStore.searchValue.length)
-    const isSelectedCategory = Boolean(filtersStore.selectedCategory.filter(item => item.key.length).length)
+    const isSelectedCategory = Boolean(filtersStore.selectedCategory.filter(item => item.key.length).length) // TODO
     const [isDisabled, setIsDisabled] = useState(false);
 
     const handleClick = (item: FEATURED_CATEGORIES) => {
