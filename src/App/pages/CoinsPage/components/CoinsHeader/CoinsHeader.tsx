@@ -38,7 +38,6 @@ const CoinsHeader: FC = () => {
     }, [searchValue])
 
     useEffect(() => {
-        console.log('test2')
         setSearchValue(searchValueInStorage)
     }, [searchValueInStorage])
 
