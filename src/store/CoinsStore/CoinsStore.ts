@@ -4,10 +4,6 @@ import {
     observable,
     runInAction,
     action,
-    toJS,
-    IReactionDisposer,
-    reaction,
-    set
 } from 'mobx';
 import * as qs from 'qs';
 
@@ -36,13 +32,11 @@ import { formationEndpoint, parseParams } from '@/utils';
 type PrivateFields =
     | '_coins'
     | '_meta'
-    | '_foundCoins'
     | '_marketStatus'
 
 export default class CoinsStore implements ILocalStore {
     private readonly _apiStore: ApiStore = new ApiStore(API_ENDPOINTS.BASE_URL)
     private _coins: CollectionModel<string, CoinItemModel> = getInitialCollectionModel();
-    private _foundCoins: CollectionModel<string, CoinItemSearchModel> = getInitialCollectionModel();
     private _marketStatus: number | null = null;
     private _meta: Meta = Meta.initial;
 
@@ -50,10 +44,8 @@ export default class CoinsStore implements ILocalStore {
         makeObservable<CoinsStore, PrivateFields>(this, {
             _coins: observable.ref,
             _meta: observable,
-            _foundCoins: observable,
             _marketStatus: observable,
             coins: computed,
-            foundCoins: computed,
             marketStatus: computed,
             meta: computed,
             getCoinsList: action,
@@ -66,10 +58,6 @@ export default class CoinsStore implements ILocalStore {
     get coins(): CoinItemModel[] {
         return linearizeCollection(this._coins);
     };
-
-    get foundCoins(): CoinItemSearchModel[] {
-        return linearizeCollection(this._foundCoins);
-    }
 
     get marketStatus(): number | null {
         return this._marketStatus;
@@ -143,13 +131,16 @@ export default class CoinsStore implements ILocalStore {
                 for (const item of (response.data as CoinsItemSearchApi).coins) {
                     foundCoins.push(normalizeCoinItemSearch(item));
                 }
-                this._foundCoins = normalizeCollection(foundCoins, (coinItem) => coinItem.id);
-                rootStore.query.setParamsFromStores({ ids: this._foundCoins.order.join(',') })
+                if (foundCoins.length) {
+                    const foundCoinsNormalized = normalizeCollection(foundCoins, (coinItem) => coinItem.id);
+                    rootStore.query.setParamsFromStores({ ids: foundCoinsNormalized.order.join(',') });
+                } else {
+                    this._coins = getInitialCollectionModel();
+                }
                 this._meta = Meta.success
             } catch (e) {
                 console.error('[ERROR]', e) // TODO remove
                 this._meta = Meta.error;
-                this._foundCoins = getInitialCollectionModel()
             }
         })
     }

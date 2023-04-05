@@ -93,7 +93,10 @@ export const getSecondsInRange = (range: TimeRangesEnum): { start: number, end: 
 export const formationEndpoint = (parsedParams: ParamsFromStores): string => {
     const isFavorites = parsedParams.feature === FEATURED_CATEGORIES.Favorites
     const ids = localStorage.getItem('favorites') ?? ''
+
     if (isFavorites && !ids) return ''
+    if (parsedParams.query && !parsedParams.ids) return ''
+
     let endpoint = `${API_ENDPOINTS.COINS}?${qs.stringify(parsedParams)}`
         + `&sparkline=true&price_change_percentage=1h%2C24h%2C7d`;
     if (isFavorites) {
