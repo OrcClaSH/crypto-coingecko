@@ -31,7 +31,7 @@ export default class ApiStore implements IApiStore {
     async request<SuccessT, ErrorT = Error, ReqT = Record<string, unknown>>(
         requestParams: RequestParams<ReqT>
     ): Promise<ApiResponse<SuccessT, ErrorT>> {
-        console.log('baseUrl', this.baseUrl)
+        // console.log('baseUrl', this.baseUrl)
         let config = {};
         if (requestParams.method === HTTPMethod.GET) {
             config = {
