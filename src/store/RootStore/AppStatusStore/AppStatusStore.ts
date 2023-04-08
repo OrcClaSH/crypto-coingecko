@@ -7,8 +7,8 @@ type PrivateFields =
     // | '_baseUrl'
 
 export default class AppStatusStore {
-    // private _baseUrl = API_ENDPOINTS.BASE_URL || API_ENDPOINTS.MOCK_URL;
-    private _baseUrl = API_ENDPOINTS.MOCK_URL;
+    private _baseUrl = API_ENDPOINTS.BASE_URL || API_ENDPOINTS.MOCK_URL;
+    // private _baseUrl = API_ENDPOINTS.MOCK_URL;
     private _errorText = '';
     private _isLimitRate = false;
 
