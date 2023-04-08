@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CoinDetailModel } from '@/store/models/coinDetail';
 import { ReactComponent as Star } from '@/assets/img/star.svg';
@@ -14,6 +14,8 @@ interface ICoinHeaderProps {
 const CoinHeader: FC<ICoinHeaderProps> = ({ coin }) => {
     const [isFavorite, setIsFavorite] = useState(false)
     const navigate = useNavigate();
+    const location = useLocation()
+    const fromPage = location.state?.from?.pathname || '/'
     const id = coin.id;
 
     const handleFavoriteClick = () => {
@@ -35,7 +37,7 @@ const CoinHeader: FC<ICoinHeaderProps> = ({ coin }) => {
         <div className={st['coin-header']}>
             <ArrowLeft
                 className={st['coin-header-btn']}
-                onClick={() => navigate('/')}
+                onClick={() => navigate(fromPage)}
             />
             <img
                 className={st['coin-header-logo']}

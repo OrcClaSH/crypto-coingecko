@@ -15,11 +15,13 @@ import {
 } from "../models/coinDetail/coinDetailItem"
 import ApiStore from "../RootStore/ApiStore"
 import { HTTPMethod } from "../RootStore/ApiStore/types"
+import rootStore from "../RootStore/instance"
 
 type PrivateFields = '_coin' | '_meta'
 
 export default class CoinDetailStore implements ILocalStore {
-    private readonly _apiStore: ApiStore = new ApiStore(API_ENDPOINTS.BASE_URL)
+    // private readonly _apiStore: ApiStore = new ApiStore(API_ENDPOINTS.BASE_URL)
+    private readonly _apiStore: ApiStore = new ApiStore()
     private _coin = {} as CoinDetailModel
     private _meta = Meta.initial
 

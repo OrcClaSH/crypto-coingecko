@@ -1,5 +1,6 @@
 export const API_ENDPOINTS = {
-    BASE_URL: import.meta.env.VITE_BASE_URL,
+    BASE_URL: import.meta.env.VITE_BASE_URL as string || 'https://api.coingecko.com/api/v3',
+    MOCK_URL: import.meta.env.VITE_MOCK_URL as string || 'https://crypto-mock-json-server-1.vercel.app',
     CURRENCIES: '/simple/supported_vs_currencies',
     CATEGORIES: '/coins/categories/list',
     MARKET_STATUS: '/global',

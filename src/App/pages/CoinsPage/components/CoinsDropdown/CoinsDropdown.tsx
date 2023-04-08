@@ -1,4 +1,5 @@
 import { FC, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 import MultiDropdown from '@/components/MultiDropdown';
@@ -61,7 +62,9 @@ const CoinsDropdown: FC<ICoinsDropdownProps> = ({ searchActive }) => {
 
     return (
         <div className={st['coins-dropdown']}>
-            <h1 className={st['coins-dropdown__title']}>Coins</h1>
+            <Link to='/' replace>
+                <h1 className={st['coins-dropdown__title']}>Coins</h1>
+            </Link>
             <MultiDropdown {...handlerOptions()} disabled={isDisabled} />
         </div>
     );

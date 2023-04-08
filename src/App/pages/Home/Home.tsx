@@ -2,7 +2,7 @@ import { FC, useContext } from 'react';
 
 import CoinsPage from '../CoinsPage';
 import localStores, { localStoresContext } from '@/store';
-import CoinsHeader from '@/App/pages/CoinsPage/components/CoinsHeader';
+import CoinsHeader from '../CoinsPage/components/CoinsHeader/CoinsHeader';
 
 import st from './Home.module.scss';
 

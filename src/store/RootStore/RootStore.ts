@@ -1,7 +1,7 @@
-import ErrorStore from "./ErrorStore/ErrorStore";
+import AppStatusStore from "./AppStatusStore/AppStatusStore";
 import QueryParamsStore from "./QueryParamsStore";
 
 export default class RootStore {
     readonly query = new QueryParamsStore();
-    readonly error = new ErrorStore();
+    readonly status = new AppStatusStore();
 };

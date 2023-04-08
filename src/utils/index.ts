@@ -97,8 +97,8 @@ export const formationEndpoint = (parsedParams: ParamsFromStores): string => {
     if (isFavorites && !ids) return ''
     if (parsedParams.query && !parsedParams.ids) return ''
 
-    let endpoint = `${API_ENDPOINTS.COINS}?${qs.stringify(parsedParams)}`
-        + `&sparkline=true&price_change_percentage=1h%2C24h%2C7d`;
+    let endpoint = `${API_ENDPOINTS.COINS}?${qs.stringify(parsedParams)}&sparkline=true`
+        // + `&sparkline=true&price_change_percentage=1h%2C24h%2C7d`;
     if (isFavorites) {
         endpoint += `&ids=${ids}`
     }
@@ -112,7 +112,7 @@ export const formationGraphEndpoint = (id: string, range: TimeRangesEnum) => {
         ? rootStore.query.paramsFromStores.vs_currency
         : VS_CURRENCY_DEFAULT.key
     const endpoint = `${API_ENDPOINTS.CURRENT_DATA}/${id}/market_chart/range` +
-        `?vs_currency=${vsCurrency}&from=${start}&to=${end}`
+        `?vs_currency=${vsCurrency}&from=${start}&to=${end}&range=${range}`
 
     return endpoint;
 };

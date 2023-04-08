@@ -11,23 +11,27 @@ import {
     StatusHTTP,
     HTTPMethod
 } from './types';
+import { runInAction } from 'mobx';
+import { API_ENDPOINTS } from '@/config';
 
 const axios = setupCache(Axios)
 
 export default class ApiStore implements IApiStore {
-    readonly baseUrl: string;
+    baseUrl: string;
     readonly apiKey?: string;
     readonly axios: AxiosCacheInstance;
+    retryCount: number = 0
 
-    constructor(baseUrl: string, apiKey?: string) {
+    constructor(apiKey?: string) {
         this.apiKey = apiKey;
-        this.baseUrl = baseUrl;
+        this.baseUrl = rootStore.status.baseUrl;
         this.axios = axios;
     }
 
     async request<SuccessT, ErrorT = Error, ReqT = Record<string, unknown>>(
         requestParams: RequestParams<ReqT>
     ): Promise<ApiResponse<SuccessT, ErrorT>> {
+        console.log('baseUrl', this.baseUrl)
         let config = {};
         if (requestParams.method === HTTPMethod.GET) {
             config = {
@@ -54,6 +58,11 @@ export default class ApiStore implements IApiStore {
             const response = await this.axios(config);
 
             if (response.status === 200) {
+                // runInAction(() => {
+                    rootStore.status.setIsLimitRate(false)
+                    // rootStore.status.setBaseUrl(API_ENDPOINTS.BASE_URL)
+                    // this.baseUrl = API_ENDPOINTS.BASE_URL
+                // })
                 return {
                     success: true,
                     data: response.data,
@@ -68,8 +77,17 @@ export default class ApiStore implements IApiStore {
                 };
             }
         } catch (error) {
-            // console.log('[ERROR apiStore]', error)
-            rootStore.error.setErrorText((error as Error).message)
+            this.baseUrl = API_ENDPOINTS.MOCK_URL
+            // runInAction(() => {
+                rootStore.status.setErrorText((error as Error).message)
+                rootStore.status.setIsLimitRate(true)
+                rootStore.status.setBaseUrl(API_ENDPOINTS.MOCK_URL)
+            // })
+            if (this.retryCount === 0) {
+                this.retryCount++
+                return await this.request<SuccessT, ErrorT, ReqT>(requestParams)
+            }
+            this.retryCount = 0;
             return {
                 success: false,
                 data: error as Error,

@@ -16,7 +16,8 @@ type PrivateFields =
     | '_period'
 
 export default class GraphStore implements ILocalStore {
-    private readonly _apiStore = new ApiStore(API_ENDPOINTS.BASE_URL);
+    // private readonly _apiStore = new ApiStore(API_ENDPOINTS.BASE_URL);
+    private readonly _apiStore = new ApiStore();
     private _graphData = {} as GraphItemModel;
     private _meta = Meta.initial;
     private _period = TimeRangesEnum["1h"];

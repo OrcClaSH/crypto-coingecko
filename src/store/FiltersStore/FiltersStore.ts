@@ -37,7 +37,8 @@ type PrivateFields =
     | '_activeFeaturedCategory'
 
 export default class FiltersStore implements ILocalStore {
-    private readonly _apiStore = new ApiStore(API_ENDPOINTS.BASE_URL);
+    // private readonly _apiStore = new ApiStore(API_ENDPOINTS.BASE_URL);
+    private readonly _apiStore = new ApiStore();
 
     private _categories: CollectionModel<string, CategoryItemModel> = getInitialCollectionModel();
     private _currencies: string[] = []
@@ -189,7 +190,7 @@ export default class FiltersStore implements ILocalStore {
                 return;
             } catch (e) {
                 this._meta = Meta.error;
-                rootStore.error.setErrorText((e as Error).message)
+                rootStore.status.setErrorText((e as Error).message)
                 this._categories = getInitialCollectionModel();
             }
         })
@@ -218,7 +219,7 @@ export default class FiltersStore implements ILocalStore {
                 return;
             } catch (e) {
                 this._meta = Meta.error;
-                rootStore.error.setErrorText((e as Error).message)
+                rootStore.status.setErrorText((e as Error).message)
                 this._currencies = [];
             }
         })

@@ -10,10 +10,10 @@ import rootStore from '@/store/RootStore/instance';
 import { useQueryParamsStoreInit } from '@/store/RootStore/hooks/useQueryParamsStoreInit';
 
 const App: FC = () => {
-  const error = rootStore.error.errorText;
-  if (error) {
-    return <ErrorPage errorMessage={error}/>
-  };
+  const error = rootStore.status.errorText;
+  // if (error) {
+  //   return <ErrorPage errorMessage={error}/>
+  // };
 
   useQueryParamsStoreInit();
 

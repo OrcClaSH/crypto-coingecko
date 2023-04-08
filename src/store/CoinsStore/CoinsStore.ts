@@ -35,7 +35,8 @@ type PrivateFields =
     | '_marketStatus'
 
 export default class CoinsStore implements ILocalStore {
-    private readonly _apiStore: ApiStore = new ApiStore(API_ENDPOINTS.BASE_URL)
+    // private readonly _apiStore: ApiStore = new ApiStore(API_ENDPOINTS.BASE_URL)
+    private readonly _apiStore: ApiStore = new ApiStore()
     private _coins: CollectionModel<string, CoinItemModel> = getInitialCollectionModel();
     private _marketStatus: number | null = null;
     private _meta: Meta = Meta.initial;

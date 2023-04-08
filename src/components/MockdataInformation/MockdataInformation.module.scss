@@ -1,0 +1,99 @@
+@import '@/assets/scss/variables';
+
+.mockinf {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-top: 1px solid red;
+    margin-bottom: 1rem;
+    padding: .5rem;
+    text-align: center;
+    border-bottom: 1px solid red;
+    border-radius: 12px;
+    box-shadow: inset $shadow;
+
+    &__title {
+        font-size: 1.8rem;
+        color: red;
+    }
+
+    &__title,
+    &__link,
+    &__text--red {
+        text-shadow: $shadow-text;
+    }
+
+    &__message {
+        margin-bottom: .5rem;
+        font-size: 1.2rem;
+    }
+
+    &__text {
+        margin-bottom: .3rem;
+
+        &--red {
+            font-size: 1.3rem;
+            color: red;
+        }
+
+        &--blue {
+            color: blue;
+            text-shadow: $shadow-text;
+        }
+    }
+
+    &__comment {
+        font-size: .8rem;
+        color: green;
+    }
+
+    &__btn {
+        margin-bottom: .5rem;
+        font-size: 1rem;
+        font-weight: 700;
+        background: transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        display: inline-block;
+        box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+            7px 7px 20px 0px rgba(0, 0, 0, .1),
+            4px 4px 5px 0px rgba(0, 0, 0, .1);
+        outline: none;
+
+        border: none;
+        color: #000;
+
+        &:after {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 100%;
+            top: 0;
+            left: 0;
+            direction: rtl;
+            z-index: -1;
+            box-shadow:
+                -7px -7px 20px 0px #fff9,
+                -4px -4px 5px 0px #fff9,
+                7px 7px 20px 0px #0002,
+                4px 4px 5px 0px #0001;
+            transition: all 0.3s ease;
+        }
+
+        &:hover {
+            color: blue;
+        }
+
+        &:hover:after {
+            left: auto;
+            right: 0;
+            width: 100%;
+        }
+
+        &:active {
+            top: 2px;
+        }
+    }
+
+}
