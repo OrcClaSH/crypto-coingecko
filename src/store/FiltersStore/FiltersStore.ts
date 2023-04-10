@@ -170,10 +170,7 @@ export default class FiltersStore implements ILocalStore {
 
         const response = await this._apiStore.request<CategoryItemApi[]>({
             method: HTTPMethod.GET,
-            data: {},
-            headers: {},
             endpoint: API_ENDPOINTS.CATEGORIES,
-            params: {},
         }, isMocked);
 
         runInAction(() => {
@@ -203,13 +200,11 @@ export default class FiltersStore implements ILocalStore {
 
         const response = await this._apiStore.request<string[]>({
             method: HTTPMethod.GET,
-            data: {},
-            headers: {},
             endpoint: API_ENDPOINTS.CURRENCIES,
-            params: {},
         }, isMocked);
 
         runInAction(() => {
+
             if (!response.status) {
                 this._meta = Meta.error;
             }
@@ -226,17 +221,17 @@ export default class FiltersStore implements ILocalStore {
         })
     };
 
-    private readonly _urlReaction: IReactionDisposer = reaction(
-        () => rootStore.status.isLimitRate,
-        (isLimitRate) => {
-            if (isLimitRate) {
-                this.getCategoriesList(true)
-                this.getCurrenciesList(true)
-            }
-        }
-    )
+    // private readonly _urlReaction: IReactionDisposer = reaction(
+    //     () => rootStore.status.isLimitRate,
+    //     (isLimitRate) => {
+    //         if (isLimitRate) {
+    //             this.getCategoriesList(true)
+    //             this.getCurrenciesList(true)
+    //         }
+    //     }
+    // )
 
     destroy() {
-        this._urlReaction()
+        // this._urlReaction()
     };
 };

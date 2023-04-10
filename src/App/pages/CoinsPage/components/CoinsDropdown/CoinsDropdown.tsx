@@ -2,9 +2,10 @@ import { FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
+import rootStore from '@/store/RootStore/instance';
+import { handlerCoinsDropdownOptions } from '@/utils';
 import MultiDropdown from '@/components/MultiDropdown';
 import { useStoresContext } from '@/App/pages/Home/Home';
-import { Option } from '@/components/MultiDropdown/MultiDropdown';
 
 import st from './CoinsDropdown.module.scss';
 
@@ -13,59 +14,27 @@ interface ICoinsDropdownProps {
 };
 
 const CoinsDropdown: FC<ICoinsDropdownProps> = ({ searchActive }) => {
-    const FiltersStore = useStoresContext().filters
-    const isDisabled = Boolean(FiltersStore.searchValue) && searchActive
+    const filtersStore = useStoresContext().filters
+    const isDisabled = Boolean(filtersStore.searchValue) && searchActive
+    const isRateLimit = rootStore.status.isLimitRate
 
     useEffect(() => {
-        FiltersStore.getCategoriesList();
-    }, []);
+        filtersStore.getCategoriesList(isRateLimit);
+    }, [isRateLimit]);
 
     useEffect(() => {
-        FiltersStore.getCurrenciesList();
-    }, []);
-
-    const handleSelected = (el: Option) => {
-        if (searchActive) {
-            FiltersStore.setSelectedCategory(el, true)
-        } else {
-            FiltersStore.setSelectedCurrency(el)
-        }
-    };
-
-    const handlerOptions = () => {
-        const options = searchActive
-            ? FiltersStore.categories.map(item => ({
-                key: item.categoryId,
-                value: item.name
-            }))
-            : FiltersStore.currencies.map(item => ({
-                key: item,
-                value: `Market - ${item.toUpperCase()}`
-            }));
-
-        const value = searchActive
-            ? FiltersStore.selectedCategory
-            : [FiltersStore.selectedCurrency]
-
-        const onChange = handleSelected;
-
-        const pluralizeOptions = searchActive
-            ? (values: Option[]) => !values[0]?.key
-                ? 'Choose category'
-                : `Selected: ${values.map(item => item.key).join(', ')}`
-            : (values: Option[]) => values.length === 0
-                ? 'Choose currency'
-                : `Market - ${values.map(item => item.key).join(', ').toLocaleUpperCase()}`;
-
-        return { options, value, onChange, pluralizeOptions, isSmall: !searchActive };
-    };
+        filtersStore.getCurrenciesList(isRateLimit);
+    }, [isRateLimit]);
 
     return (
         <div className={st['coins-dropdown']}>
             <Link to='/' replace>
                 <h1 className={st['coins-dropdown__title']}>Coins</h1>
             </Link>
-            <MultiDropdown {...handlerOptions()} disabled={isDisabled} />
+            <MultiDropdown
+                {...handlerCoinsDropdownOptions(searchActive, filtersStore)}
+                disabled={isDisabled}
+            />
         </div>
     );
 };

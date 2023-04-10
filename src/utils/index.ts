@@ -5,6 +5,8 @@ import { TimeRangesEnum } from "./enums";
 import * as qs from 'qs';
 import { FEATURED_CATEGORIES } from "./enums";
 import rootStore from "@/store/RootStore/instance";
+import { Option } from "@/components/MultiDropdown/MultiDropdown";
+import FiltersStore from "@/store/FiltersStore/FiltersStore";
 
 export const removeKeyValue = (param: ParamsFromStoresRaw): ParamsFromStoresRaw => {
     const result: ParamsFromStoresRaw = { ...param };
@@ -115,4 +117,40 @@ export const formationGraphEndpoint = (id: string, range: TimeRangesEnum) => {
         `?vs_currency=${vsCurrency}&from=${start}&to=${end}&range=${range}`
 
     return endpoint;
+};
+
+export const handlerCoinsDropdownOptions = (searchActive: boolean, filtersStore: FiltersStore) => {
+    const handleSelected = (el: Option) => {
+        if (searchActive) {
+            filtersStore.setSelectedCategory(el, true)
+        } else {
+            filtersStore.setSelectedCurrency(el)
+        }
+    };
+
+    const options = searchActive
+        ? filtersStore.categories.map(item => ({
+            key: item.categoryId,
+            value: item.name
+        }))
+        : filtersStore.currencies.map(item => ({
+            key: item,
+            value: `Market - ${item.toUpperCase()}`
+        }));
+
+    const value = searchActive
+        ? filtersStore.selectedCategory
+        : [filtersStore.selectedCurrency]
+
+    const onChange = handleSelected;
+
+    const pluralizeOptions = searchActive
+        ? (values: Option[]) => !values[0]?.key
+            ? 'Choose category'
+            : `Selected: ${values.map(item => item.key).join(', ')}`
+        : (values: Option[]) => values.length === 0
+            ? 'Choose currency'
+            : `Market - ${values.map(item => item.key).join(', ').toLocaleUpperCase()}`;
+
+    return { options, value, onChange, pluralizeOptions, isSmall: !searchActive };
 };

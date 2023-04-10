@@ -11,9 +11,9 @@ import { useQueryParamsStoreInit } from '@/store/RootStore/hooks/useQueryParamsS
 
 const App: FC = () => {
   const error = rootStore.status.errorText;
-  // if (error) {
-  //   return <ErrorPage errorMessage={error}/>
-  // };
+  if (error) {
+    return <ErrorPage errorMessage={error}/>
+  };
 
   useQueryParamsStoreInit();
 
@@ -24,7 +24,7 @@ const App: FC = () => {
         <Route path='coins'>
           <Route path=':id' element={<CoinPage />} />
         </Route>
-        <Route path='/error' element={<ErrorPage errorMessage={error}/>}/>
+        <Route path='/error' element={<ErrorPage/>}/>
         <Route path='*' element={<Navigate to='/' replace />} />
       </Route>
     </Routes>

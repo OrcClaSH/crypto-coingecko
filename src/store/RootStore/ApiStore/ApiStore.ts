@@ -5,7 +5,6 @@ import rootStore from '../instance';
 import { API_ENDPOINTS } from '@/config';
 import {
     ApiResponse,
-    GetDataParams,
     IApiStore,
     RequestParams,
     StatusHTTP,
@@ -31,6 +30,7 @@ export default class ApiStore implements IApiStore {
         isMocked: boolean = false
     ): Promise<ApiResponse<SuccessT, ErrorT>> {
         let baseURL = isMocked ? API_ENDPOINTS.MOCK_URL : this.baseUrl
+
         let config = {};
         if (requestParams.method === HTTPMethod.GET) {
             config = {
@@ -57,7 +57,6 @@ export default class ApiStore implements IApiStore {
             const response = await this.axios(config);
 
             if (response.status === 200) {
-                rootStore.status.setIsLimitRate(false)
                 return {
                     success: true,
                     data: response.data,
@@ -73,31 +72,27 @@ export default class ApiStore implements IApiStore {
             }
         } catch (error) {
             const err = error as AxiosError
+
             if (err.code === 'ERR_NETWORK') {
                 this.baseUrl = API_ENDPOINTS.MOCK_URL
-                rootStore.status.setErrorText(err.message)
                 rootStore.status.setIsLimitRate(true)
                 rootStore.status.setBaseUrl(API_ENDPOINTS.MOCK_URL)
+            } else {
+                rootStore.status.setErrorText(err.message)
             }
+
             if (this.retryCount === 0) {
                 this.retryCount++
                 return await this.request<SuccessT, ErrorT, ReqT>(requestParams)
             }
+
             this.retryCount = 0;
+
             return {
                 success: false,
                 data: error as Error,
                 status: StatusHTTP.UnExpectedError,
             };
         }
-    }
-
-    async getData<SuccessT, ErrorT = Error>(params: GetDataParams): Promise<ApiResponse<SuccessT, ErrorT>> {
-        return await this.request<SuccessT, ErrorT>({
-            method: HTTPMethod.GET,
-            headers: {},
-            data: {},
-            ...params,
-        });
     }
 }
