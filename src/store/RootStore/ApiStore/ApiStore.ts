@@ -1,8 +1,8 @@
-import Axios from 'axios';
+import Axios, { AxiosError } from 'axios';
 import { AxiosCacheInstance, setupCache } from 'axios-cache-interceptor';
 
 import rootStore from '../instance';
-
+import { API_ENDPOINTS } from '@/config';
 import {
     ApiResponse,
     GetDataParams,
@@ -11,8 +11,6 @@ import {
     StatusHTTP,
     HTTPMethod
 } from './types';
-import { runInAction } from 'mobx';
-import { API_ENDPOINTS } from '@/config';
 
 const axios = setupCache(Axios)
 
@@ -29,14 +27,15 @@ export default class ApiStore implements IApiStore {
     }
 
     async request<SuccessT, ErrorT = Error, ReqT = Record<string, unknown>>(
-        requestParams: RequestParams<ReqT>
+        requestParams: RequestParams<ReqT>,
+        isMocked: boolean = false
     ): Promise<ApiResponse<SuccessT, ErrorT>> {
-        // console.log('baseUrl', this.baseUrl)
+        let baseURL = isMocked ? API_ENDPOINTS.MOCK_URL : this.baseUrl
         let config = {};
         if (requestParams.method === HTTPMethod.GET) {
             config = {
                 method: requestParams.method,
-                baseURL: this.baseUrl,
+                baseURL,
                 url: requestParams.endpoint,
                 params: { apiKey: this.apiKey, ...requestParams.params },
             };
@@ -47,7 +46,7 @@ export default class ApiStore implements IApiStore {
                     ...requestParams.headers,
                     'Content-Type': 'application/json;charset=utf-8',
                 },
-                baseURL: this.baseUrl,
+                baseURL,
                 url: requestParams.endpoint,
                 data: JSON.stringify(requestParams.data),
                 params: { apiKey: this.apiKey, ...requestParams.params },
@@ -58,11 +57,7 @@ export default class ApiStore implements IApiStore {
             const response = await this.axios(config);
 
             if (response.status === 200) {
-                // runInAction(() => {
-                    rootStore.status.setIsLimitRate(false)
-                    // rootStore.status.setBaseUrl(API_ENDPOINTS.BASE_URL)
-                    // this.baseUrl = API_ENDPOINTS.BASE_URL
-                // })
+                rootStore.status.setIsLimitRate(false)
                 return {
                     success: true,
                     data: response.data,
@@ -77,12 +72,13 @@ export default class ApiStore implements IApiStore {
                 };
             }
         } catch (error) {
-            this.baseUrl = API_ENDPOINTS.MOCK_URL
-            // runInAction(() => {
-                rootStore.status.setErrorText((error as Error).message)
+            const err = error as AxiosError
+            if (err.code === 'ERR_NETWORK') {
+                this.baseUrl = API_ENDPOINTS.MOCK_URL
+                rootStore.status.setErrorText(err.message)
                 rootStore.status.setIsLimitRate(true)
                 rootStore.status.setBaseUrl(API_ENDPOINTS.MOCK_URL)
-            // })
+            }
             if (this.retryCount === 0) {
                 this.retryCount++
                 return await this.request<SuccessT, ErrorT, ReqT>(requestParams)

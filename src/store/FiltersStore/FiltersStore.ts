@@ -4,6 +4,8 @@ import {
     computed,
     action,
     runInAction,
+    IReactionDisposer,
+    reaction,
 } from 'mobx';
 
 import { API_ENDPOINTS, SORT_TYPES, VS_CURRENCY_DEFAULT } from '@/config';
@@ -37,7 +39,6 @@ type PrivateFields =
     | '_activeFeaturedCategory'
 
 export default class FiltersStore implements ILocalStore {
-    // private readonly _apiStore = new ApiStore(API_ENDPOINTS.BASE_URL);
     private readonly _apiStore = new ApiStore();
 
     private _categories: CollectionModel<string, CategoryItemModel> = getInitialCollectionModel();
@@ -163,7 +164,7 @@ export default class FiltersStore implements ILocalStore {
         })
     }
 
-    async getCategoriesList(): Promise<void> {
+    async getCategoriesList(isMocked: boolean = false): Promise<void> {
         this._meta = Meta.loading;
         this._categories = getInitialCollectionModel();
 
@@ -173,7 +174,7 @@ export default class FiltersStore implements ILocalStore {
             headers: {},
             endpoint: API_ENDPOINTS.CATEGORIES,
             params: {},
-        });
+        }, isMocked);
 
         runInAction(() => {
             if (!response.status) {
@@ -196,7 +197,7 @@ export default class FiltersStore implements ILocalStore {
         })
     };
 
-    async getCurrenciesList(): Promise<void> {
+    async getCurrenciesList(isMocked: boolean = false): Promise<void> {
         this._meta = Meta.loading;
         this._currencies = [];
 
@@ -206,7 +207,7 @@ export default class FiltersStore implements ILocalStore {
             headers: {},
             endpoint: API_ENDPOINTS.CURRENCIES,
             params: {},
-        });
+        }, isMocked);
 
         runInAction(() => {
             if (!response.status) {
@@ -225,14 +226,17 @@ export default class FiltersStore implements ILocalStore {
         })
     };
 
-    // private readonly _qpReaction: IReactionDisposer = reaction(
-    //     () => rootStore.query.getParam(),
-    //     (search) => {
-    //         console.log('_qpReaction', search);
-    //     }
-    // );
+    private readonly _urlReaction: IReactionDisposer = reaction(
+        () => rootStore.status.isLimitRate,
+        (isLimitRate) => {
+            if (isLimitRate) {
+                this.getCategoriesList(true)
+                this.getCurrenciesList(true)
+            }
+        }
+    )
 
     destroy() {
-        // this._qpReaction();
+        this._urlReaction()
     };
 };
