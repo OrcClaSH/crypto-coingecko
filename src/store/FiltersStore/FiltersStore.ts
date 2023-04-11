@@ -142,8 +142,8 @@ export default class FiltersStore implements ILocalStore {
 
     setActiveFeaturedCategory = (value: FEATURED_CATEGORIES, isResetPage = false): void => {
         const params = isResetPage
-            ? { feature: value, order: '', page: '1' }
-            : { feature: value, order: '' }
+            ? { feature: value, order: '', ids: '', page: '1' } // TODO
+            : { feature: value, order: '', ids: '', }
         switch (value) {
             case FEATURED_CATEGORIES.Gainer:
             case FEATURED_CATEGORIES.Loser:

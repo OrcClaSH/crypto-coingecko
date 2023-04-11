@@ -4,6 +4,7 @@ import debounce from 'lodash.debounce';
 
 import Input from '@/components/Input';
 import Button from '@/components/Button';
+import ListParamsBtn from '../ListParamsBtn';
 import { useStoresContext } from '@/App/pages/Home/Home';
 import { useChangeFromParams } from '@/hooks/useChangeFromParams';
 import { ReactComponent as SearchImg } from '@/assets/img/search.svg';
@@ -12,7 +13,6 @@ import CoinsDropdown from '@/App/pages/CoinsPage/components/CoinsDropdown';
 import { useChangeParamsFromStore } from '@/hooks/useChangeParamsFromStore';
 
 import st from './CoinsHeader.module.scss';
-import ListParamsBtn from '../ListParamsBtn';
 
 const CoinsHeader: FC = () => {
     const [searchActive, setSearchActive] = useState(false);

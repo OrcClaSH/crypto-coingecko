@@ -100,7 +100,6 @@ export const formationEndpoint = (parsedParams: ParamsFromStores): string => {
     if (parsedParams.query && !parsedParams.ids) return ''
 
     let endpoint = `${API_ENDPOINTS.COINS}?${qs.stringify(parsedParams)}&sparkline=true`
-        // + `&sparkline=true&price_change_percentage=1h%2C24h%2C7d`;
     if (isFavorites) {
         endpoint += `&ids=${ids}`
     }
