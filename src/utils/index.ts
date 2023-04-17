@@ -1,12 +1,12 @@
-import { API_ENDPOINTS, VS_CURRENCY_DEFAULT } from "@/config";
-import { ParamsEnum, ParamsFromStores, ParamsFromStoresRaw } from "@/store/RootStore/QueryParamsStore/types";
-import { toJS } from "mobx";
-import { TimeRangesEnum } from "./enums";
 import * as qs from 'qs';
+
+import { TimeRangesEnum } from "./enums";
 import { FEATURED_CATEGORIES } from "./enums";
 import rootStore from "@/store/RootStore/instance";
-import { Option } from "@/components/MultiDropdown/MultiDropdown";
 import FiltersStore from "@/store/FiltersStore/FiltersStore";
+import { API_ENDPOINTS, VS_CURRENCY_DEFAULT } from "@/config";
+import { Option } from "@/components/MultiDropdown/MultiDropdown";
+import { ParamsEnum, ParamsFromStores, ParamsFromStoresRaw } from "@/store/RootStore/QueryParamsStore/types";
 
 export const removeKeyValue = (param: ParamsFromStoresRaw): ParamsFromStoresRaw => {
     const result: ParamsFromStoresRaw = { ...param };
@@ -91,7 +91,6 @@ export const getSecondsInRange = (range: TimeRangesEnum): { start: number, end: 
     };
 };
 
-// TODO
 export const formationEndpoint = (parsedParams: ParamsFromStores): string => {
     const isFavorites = parsedParams.feature === FEATURED_CATEGORIES.Favorites
     const ids = localStorage.getItem('favorites') ?? ''

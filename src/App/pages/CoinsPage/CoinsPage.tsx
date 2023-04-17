@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
 import Coins from './components/Coins/Coins';
-import FeaturedCategories from './components/FeaturedCoins';
 import Pagination from '@/components/Pagination';
+import FeaturedCategories from './components/FeaturedCoins';
 
 import st from './CoinsPage.module.scss';
 

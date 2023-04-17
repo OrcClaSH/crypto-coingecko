@@ -1,11 +1,12 @@
-import cn from 'classnames';
 import { FC } from 'react';
+import cn from 'classnames';
+import { observer } from 'mobx-react-lite';
+
+import { PERIOD_COMMENTS } from '@/config';
 import { TimeRangesEnum } from '@/utils/enums';
+import { useStoresContext } from '@/App/pages/Home/Home';
 
 import st from './PeriodButtons.module.scss';
-import { useStoresContext } from '@/App/pages/Home/Home';
-import { observer } from 'mobx-react-lite';
-import { PERIOD_COMMENTS } from '@/config';
 
 const PeriodButtons: FC = () => {
     const graphStore = useStoresContext().graph

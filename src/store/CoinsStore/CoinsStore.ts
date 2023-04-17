@@ -9,7 +9,6 @@ import * as qs from 'qs';
 
 import { Meta } from '@/utils/enums';
 import { API_ENDPOINTS } from '@/config';
-import { ILocalStore } from '@/hooks/useLocalStore';
 import {
     CoinItemApi,
     CoinItemModel,
@@ -25,9 +24,10 @@ import {
     normalizeCollection
 } from '../models/shared/collection';
 import ApiStore from '../RootStore/ApiStore';
-import { HTTPMethod } from '../RootStore/ApiStore/types';
 import rootStore from '../RootStore/instance';
+import { ILocalStore } from '@/hooks/useLocalStore';
 import { formationEndpoint, parseParams } from '@/utils';
+import { HTTPMethod } from '../RootStore/ApiStore/types';
 
 type PrivateFields =
     | '_coins'
@@ -35,7 +35,6 @@ type PrivateFields =
     | '_marketStatus'
 
 export default class CoinsStore implements ILocalStore {
-    // private readonly _apiStore: ApiStore = new ApiStore(API_ENDPOINTS.BASE_URL)
     private readonly _apiStore: ApiStore = new ApiStore()
     private _coins: CollectionModel<string, CoinItemModel> = getInitialCollectionModel();
     private _marketStatus: number | null = null;
@@ -89,7 +88,7 @@ export default class CoinsStore implements ILocalStore {
         runInAction(() => {
             if (!response.success) {
                 this._meta = Meta.error;
-                console.error(response.status) // TODO error handler;
+                // console.error(response.status) // TODO error handler;
                 return;
             }
 
@@ -103,7 +102,7 @@ export default class CoinsStore implements ILocalStore {
                 this._coins = normalizeCollection(coins, (coinItem) => coinItem.id);
                 return;
             } catch (e) {
-                console.error('[ERROR]', e) // TODO remove
+                // console.error('[ERROR]', e) // TODO remove
                 this._meta = Meta.error;
                 this._coins = getInitialCollectionModel();
             };
@@ -140,7 +139,7 @@ export default class CoinsStore implements ILocalStore {
                 }
                 this._meta = Meta.success
             } catch (e) {
-                console.error('[ERROR]', e) // TODO remove
+                // console.error('[ERROR]', e) // TODO remove
                 this._meta = Meta.error;
             }
         })
@@ -158,7 +157,7 @@ export default class CoinsStore implements ILocalStore {
                     this._marketStatus = response.data.data?.market_cap_change_percentage_24h_usd
                 }
             } catch (e) {
-                console.error('[ERROR]', e) // TODO remove
+                // console.error('[ERROR]', e) // TODO remove
             }
         })
     }

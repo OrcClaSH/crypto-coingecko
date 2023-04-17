@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import cn from 'classnames';
 
-import st from './Card.module.scss';
-import GraphSmall from '@/App/pages/CoinsPage/components/GraphSmall';
 import { COLORS } from '@/config';
+import GraphSmall from '@/App/pages/CoinsPage/components/GraphSmall';
+
+import st from './Card.module.scss';
 
 export type CardProps = {
     /** ID */

@@ -4,29 +4,27 @@ import {
     computed,
     action,
     runInAction,
-    IReactionDisposer,
-    reaction,
 } from 'mobx';
 
-import { API_ENDPOINTS, SORT_TYPES, VS_CURRENCY_DEFAULT } from '@/config';
-import ApiStore from '../RootStore/ApiStore';
-import {
-    CollectionModel,
-    getInitialCollectionModel,
-    linearizeCollection,
-    normalizeCollection
-} from '../models/shared/collection';
 import {
     ActiveFeaturedCategory,
     CategoryItemApi,
     CategoryItemModel,
     normalizeCategoryItem
 } from '../models/filters';
-import { ILocalStore } from '@/hooks/useLocalStore';
-import { FEATURED_CATEGORIES, Meta } from '@/utils/enums';
-import { HTTPMethod } from '../RootStore/ApiStore/types';
+import {
+    CollectionModel,
+    getInitialCollectionModel,
+    linearizeCollection,
+    normalizeCollection
+} from '../models/shared/collection';
 import rootStore from '../RootStore';
+import ApiStore from '../RootStore/ApiStore';
+import { ILocalStore } from '@/hooks/useLocalStore';
+import { HTTPMethod } from '../RootStore/ApiStore/types';
+import { FEATURED_CATEGORIES, Meta } from '@/utils/enums';
 import { Option } from '@/components/MultiDropdown/MultiDropdown';
+import { API_ENDPOINTS, SORT_TYPES, VS_CURRENCY_DEFAULT } from '@/config';
 
 type PrivateFields =
     | '_meta'

@@ -1,5 +1,6 @@
-import { API_ENDPOINTS } from "@/config";
 import { action, computed, makeObservable, observable } from "mobx"
+
+import { API_ENDPOINTS } from "@/config";
 
 type PrivateFields =
     | '_errorText'

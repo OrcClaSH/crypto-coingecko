@@ -1,13 +1,11 @@
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 
-import { formationGraphEndpoint, getSecondsInRange } from "@/utils";
 import ApiStore from "../RootStore/ApiStore";
-import rootStore from "../RootStore/instance";
+import { formationGraphEndpoint } from "@/utils";
 import { ILocalStore } from "@/hooks/useLocalStore";
 import { Meta, TimeRangesEnum } from "@/utils/enums";
 import { normalizeGraphItem } from "../models/graph";
 import { HTTPMethod } from "../RootStore/ApiStore/types";
-import { API_ENDPOINTS, VS_CURRENCY_DEFAULT } from "@/config";
 import { GraphItemModel, GraphItemApi } from "../models/graph";
 
 type PrivateFields =
@@ -16,7 +14,6 @@ type PrivateFields =
     | '_period'
 
 export default class GraphStore implements ILocalStore {
-    // private readonly _apiStore = new ApiStore(API_ENDPOINTS.BASE_URL);
     private readonly _apiStore = new ApiStore();
     private _graphData = {} as GraphItemModel;
     private _meta = Meta.initial;

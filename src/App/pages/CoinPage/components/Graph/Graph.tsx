@@ -1,8 +1,6 @@
-import { useStoresContext } from '@/App/pages/Home/Home';
-import { Meta } from '@/utils/enums';
 import { toJS } from 'mobx';
-import { observer } from 'mobx-react-lite';
 import { FC, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 import {
     AreaChart,
     Area,
@@ -12,6 +10,9 @@ import {
     Tooltip,
     CartesianGrid
 } from 'recharts';
+
+import { Meta } from '@/utils/enums';
+import { useStoresContext } from '@/App/pages/Home/Home';
 
 interface IGraphProps {
     id: string | undefined;

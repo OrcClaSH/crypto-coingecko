@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { observer } from "mobx-react-lite";
 
+import { API_ENDPOINTS } from "@/config";
 import rootStore from "@/store/RootStore/instance";
+import { useStoresContext } from "@/App/pages/Home/Home";
 
 import st from './Pagination.module.scss';
-import { useStoresContext } from "@/App/pages/Home/Home";
-import { API_ENDPOINTS } from "@/config";
 
 const Pagination: FC = () => {
     const pageNow = rootStore.query.paramsFromStores.page || 1

@@ -1,20 +1,17 @@
-import React from 'react'
-import { BrowserRouter } from 'react-router-dom';
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom';
 
-import './config/configureMobX'
 import App from './App'
-
-import '@/assets/scss/main.scss';
+import './config/configureMobX'
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorPage from './App/pages/ErrorPage/ErrorPage';
 
+import '@/assets/scss/main.scss';
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
   <BrowserRouter>
     <ErrorBoundary fallback={<ErrorPage />}>
       <App />
     </ErrorBoundary>
   </BrowserRouter>
-  // </React.StrictMode>,
 )

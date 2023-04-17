@@ -11,7 +11,6 @@ export default defineConfig({
     port: 3001,
     proxy: {
     //   '/api': 'http://clt.its:8000'
-    // '/api': 'https://pro-api.coingecko.com'
     }
   },
   resolve: {

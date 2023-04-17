@@ -1,12 +1,11 @@
-import { FC, useEffect, useState } from "react";
 import cn from 'classnames';
 import { observer } from "mobx-react-lite";
+import { FC, useEffect, useState } from "react";
 
 import { FEATURED_CATEGORIES } from "@/utils/enums";
 import { useStoresContext } from "@/App/pages/Home/Home";
 
 import st from './FeaturedCategories.module.scss';
-import { toJS } from "mobx";
 
 const FeaturedCategories: FC = () => {
     const filtersStore = useStoresContext().filters

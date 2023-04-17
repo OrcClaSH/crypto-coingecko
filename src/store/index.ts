@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
+import GraphStore from './GraphStore/GraphStore';
 import CoinsStore from "./CoinsStore/CoinsStore";
 import FiltersStore from "./FiltersStore/FiltersStore";
 import CoinDetailStore from './CoinDetailStore/CoinDetailStore';
-import GraphStore from './GraphStore/GraphStore';
 
 class LocalStores {
     coins: CoinsStore;

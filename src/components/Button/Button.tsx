@@ -1,9 +1,8 @@
+import cn from 'classnames';
 import React, { FC } from 'react';
 
-import cn from 'classnames';
-
-import st from './Button.module.scss';
 import Loader from '../Loader';
+import st from './Button.module.scss';
 
 export type ButtonProps = React.PropsWithChildren<{
     loading?: boolean;

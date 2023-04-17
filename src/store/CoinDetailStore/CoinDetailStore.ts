@@ -1,6 +1,3 @@
-import { API_ENDPOINTS } from "@/config"
-import { ILocalStore } from "@/hooks/useLocalStore"
-import { Meta } from "@/utils/enums"
 import {
     action,
     computed,
@@ -8,19 +5,20 @@ import {
     observable,
     runInAction,
 } from "mobx"
+
+import { Meta } from "@/utils/enums"
+import ApiStore from "../RootStore/ApiStore"
+import { ILocalStore } from "@/hooks/useLocalStore"
+import { HTTPMethod } from "../RootStore/ApiStore/types"
 import {
     CoinDetailApi,
     CoinDetailModel,
     normalizeCoinDetail
 } from "../models/coinDetail/coinDetailItem"
-import ApiStore from "../RootStore/ApiStore"
-import { HTTPMethod } from "../RootStore/ApiStore/types"
-import rootStore from "../RootStore/instance"
 
 type PrivateFields = '_coin' | '_meta'
 
 export default class CoinDetailStore implements ILocalStore {
-    // private readonly _apiStore: ApiStore = new ApiStore(API_ENDPOINTS.BASE_URL)
     private readonly _apiStore: ApiStore = new ApiStore()
     private _coin = {} as CoinDetailModel
     private _meta = Meta.initial
