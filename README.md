@@ -1,9 +1,8 @@
 # crypto-coingecko
 
 ### <img src="https://cdn.svgporn.com/logos/git-icon.svg" height="32" align="top"> start project
-- yarn dev
-- build": "tsc && vite build",
-- preview": "vite preview"
+- yarn dev -> run in development mode
+
 #
 ## 🧱 Стек технологий:
 
