@@ -1,11 +1,11 @@
 # crypto-coingecko
 
 ### <img src="https://cdn.svgporn.com/logos/git-icon.svg" height="32" align="top"> start project
-- yarn dev -> run in development mode (vite)
-- yarn build -> build project (tsc && vite build)
-- yarn preview -> preview project (vite preview)
+- **yarn dev** -> run in development mode `(vite)`
+- **yarn build** -> build project `(tsc && vite build)`
+- **yarn preview**-> preview project `(vite preview)`
 #
-## 🧱 Стек технологий:
+## 🧱 Stack:
 
 [react]: https://reactjs.org
 [router]: https://reactrouter.com
@@ -28,7 +28,7 @@
 - <img src="https://cdn.svgporn.com/logos/react-router.svg" height="32" align="top"> [React-router][router] - fully-featured client and server-side routing library
 #
 
-# :warning: Note:
+## :warning: Note:
 10-30 calls per minute
 Our Public API has a rate limit of 10-30 calls per minute, if you exceed that limit you will be blocked until the next 1+ minute window.
 ```A notification will appear```
