@@ -1,11 +1,11 @@
-import { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 
-export const useLatest = (value: any) => {
-    const valueRef = useRef(value)
+export const useLatest = (value: any): React.MutableRefObject<any> => {
+  const valueRef = useRef(value);
 
-    useLayoutEffect(() => {
-        valueRef.current = value;
-    }, [value]);
+  useLayoutEffect(() => {
+    valueRef.current = value;
+  }, [value]);
 
-    return valueRef;
+  return valueRef;
 };

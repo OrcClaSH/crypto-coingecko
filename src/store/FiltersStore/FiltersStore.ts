@@ -1,235 +1,251 @@
-import {
-    makeObservable,
-    observable,
-    computed,
-    action,
-    runInAction,
-} from 'mobx';
+/* eslint-disable no-underscore-dangle */
+import { makeObservable, observable, computed, action, runInAction } from 'mobx';
 
 import {
-    ActiveFeaturedCategory,
-    CategoryItemApi,
-    CategoryItemModel,
-    normalizeCategoryItem
+  ActiveFeaturedCategory,
+  CategoryItemApi,
+  CategoryItemModel,
+  normalizeCategoryItem,
 } from '../models/filters';
 import {
-    CollectionModel,
-    getInitialCollectionModel,
-    linearizeCollection,
-    normalizeCollection
+  CollectionModel,
+  getInitialCollectionModel,
+  linearizeCollection,
+  normalizeCollection,
 } from '../models/shared/collection';
 import rootStore from '../RootStore';
 import ApiStore from '../RootStore/ApiStore';
-import { ILocalStore } from '@/hooks/useLocalStore';
 import { HTTPMethod } from '../RootStore/ApiStore/types';
-import { FEATURED_CATEGORIES, Meta } from '@/utils/enums';
+
 import { Option } from '@/components/MultiDropdown/MultiDropdown';
 import { API_ENDPOINTS, SORT_TYPES, VS_CURRENCY_DEFAULT } from '@/config';
+import { ILocalStore } from '@/hooks/useLocalStore';
+import { FEATURED_CATEGORIES, Meta } from '@/utils/enums';
 
 type PrivateFields =
-    | '_meta'
-    | '_page'
-    | '_categories'
-    | '_currencies'
-    | '_searchValue'
-    | '_selectedCurrency'
-    | '_selectedCategory'
-    | '_activeFeaturedCategory'
+  | '_meta'
+  | '_page'
+  | '_categories'
+  | '_currencies'
+  | '_searchValue'
+  | '_selectedCurrency'
+  | '_selectedCategory'
+  | '_activeFeaturedCategory';
 
 export default class FiltersStore implements ILocalStore {
-    private readonly _apiStore = new ApiStore();
+  private readonly _apiStore = new ApiStore();
 
-    private _categories: CollectionModel<string, CategoryItemModel> = getInitialCollectionModel();
-    private _currencies: string[] = []
-    private _meta: Meta = Meta.initial;
-    private _selectedCurrency: Option = VS_CURRENCY_DEFAULT;
-    private _selectedCategory: Option[] = [];
-    private _searchValue: string = '';
-    private _activeFeaturedCategory: ActiveFeaturedCategory = FEATURED_CATEGORIES.Default
-    private _page: string = ''
+  private _categories: CollectionModel<string, CategoryItemModel> =
+    getInitialCollectionModel();
 
-    constructor() {
-        makeObservable<FiltersStore, PrivateFields>(this, {
-            _categories: observable.ref,
-            _currencies: observable.ref,
-            _meta: observable,
-            _selectedCurrency: observable,
-            _selectedCategory: observable,
-            _searchValue: observable,
-            _activeFeaturedCategory: observable,
-            _page: observable,
-            meta: computed,
-            categories: computed,
-            currencies: computed,
-            selectedCurrency: computed,
-            selectedCategory: computed,
-            searchValue: computed,
-            selectedFeatureCategory: computed,
-            page: computed,
-            getCategoriesList: action,
-            getCurrenciesList: action,
-            setSelectedCurrency: action,
-            setSelectedCategory: action,
-            setSearchValue: action,
-            setActiveFeaturedCategory: action,
-            setPage: action,
-        })
+  private _currencies: string[] = [];
+
+  private _meta: Meta = Meta.initial;
+
+  private _selectedCurrency: Option = VS_CURRENCY_DEFAULT;
+
+  private _selectedCategory: Option[] = [];
+
+  private _searchValue: string = '';
+
+  private _activeFeaturedCategory: ActiveFeaturedCategory = FEATURED_CATEGORIES.Default;
+
+  private _page: string = '';
+
+  constructor() {
+    makeObservable<FiltersStore, PrivateFields>(this, {
+      _categories: observable.ref,
+      _currencies: observable.ref,
+      _meta: observable,
+      _selectedCurrency: observable,
+      _selectedCategory: observable,
+      _searchValue: observable,
+      _activeFeaturedCategory: observable,
+      _page: observable,
+      meta: computed,
+      categories: computed,
+      currencies: computed,
+      selectedCurrency: computed,
+      selectedCategory: computed,
+      searchValue: computed,
+      selectedFeatureCategory: computed,
+      page: computed,
+      getCategoriesList: action,
+      getCurrenciesList: action,
+      setSelectedCurrency: action,
+      setSelectedCategory: action,
+      setSearchValue: action,
+      setActiveFeaturedCategory: action,
+      setPage: action,
+    });
+  }
+
+  get categories(): CategoryItemModel[] {
+    return linearizeCollection(this._categories);
+  }
+
+  get currencies(): string[] {
+    return this._currencies;
+  }
+
+  get meta(): Meta {
+    return this._meta;
+  }
+
+  get selectedCurrency(): Option {
+    return this._selectedCurrency;
+  }
+
+  get selectedCategory(): Option[] {
+    return this._selectedCategory;
+  }
+
+  get searchValue(): string {
+    return this._searchValue;
+  }
+
+  get selectedFeatureCategory(): ActiveFeaturedCategory {
+    return this._activeFeaturedCategory;
+  }
+
+  get page(): string {
+    return this._page;
+  }
+
+  setSelectedCurrency = (currency: Option): void => {
+    runInAction(() => {
+      this._selectedCurrency = currency;
+      rootStore.query.setParamsFromStores({ vs_currency: currency.key });
+    });
+  };
+
+  setSelectedCategory = (category: Option, isResetPage = false): void => {
+    const categoryInSelected = this._selectedCategory.find(
+      (item) => item.key === category.key,
+    );
+
+    runInAction(() => {
+      if (categoryInSelected) {
+        this._selectedCategory = this._selectedCategory.filter(
+          (item) => item.key !== category.key,
+        );
+      } else {
+        this._selectedCategory = [category];
+      }
+      const params: { category: string; page?: string } = {
+        category: this._selectedCategory.map((item) => item.key).join(','),
+      };
+
+      if (isResetPage) params.page = '1';
+      rootStore.query.setParamsFromStores(params);
+    });
+  };
+
+  setSearchValue = (value: string): void => {
+    this._searchValue = value;
+    runInAction(() => {
+      rootStore.query.setParamsFromStores({ query: value, page: '1' });
+      if (!value) rootStore.query.setParamsFromStores({ ids: '' });
+    });
+  };
+
+  setActiveFeaturedCategory = (value: FEATURED_CATEGORIES, isResetPage = false): void => {
+    const params = isResetPage
+      ? { feature: value, order: '', ids: '', page: '1' } // TODO
+      : { feature: value, order: '', ids: '' };
+
+    switch (value) {
+      case FEATURED_CATEGORIES.Gainer:
+      case FEATURED_CATEGORIES.Loser:
+        params.order = SORT_TYPES[value];
+        break;
+      default:
     }
+    runInAction(() => {
+      this._activeFeaturedCategory = value;
+      rootStore.query.setParamsFromStores(params);
+    });
+  };
 
-    get categories() {
-        return linearizeCollection(this._categories);
-    };
+  setPage = (pageNow: string): void => {
+    runInAction(() => {
+      this._page = pageNow;
+      rootStore.query.setParamsFromStores({ page: pageNow });
+    });
+  };
 
-    get currencies() {
-        return this._currencies;
-    }
+  async getCategoriesList(isMocked: boolean = false): Promise<void> {
+    this._meta = Meta.loading;
+    this._categories = getInitialCollectionModel();
 
-    get meta() {
-        return this._meta;
-    }
+    const response = await this._apiStore.request<CategoryItemApi[]>(
+      {
+        method: HTTPMethod.GET,
+        endpoint: API_ENDPOINTS.CATEGORIES,
+      },
+      isMocked,
+    );
 
-    get selectedCurrency() {
-        return this._selectedCurrency;
-    }
+    runInAction(() => {
+      if (!response.status) {
+        this._meta = Meta.error;
+      }
 
-    get selectedCategory() {
-        return this._selectedCategory;
-    }
+      try {
+        const categories: CategoryItemModel[] = (response.data as CategoryItemApi[]).map(
+          normalizeCategoryItem,
+        );
 
-    get searchValue() {
-        return this._searchValue;
-    }
-
-    get selectedFeatureCategory() {
-        return this._activeFeaturedCategory
-    }
-
-    get page() {
-        return this._page;
-    }
-
-    setSelectedCurrency = (currency: Option): void => {
-        runInAction(() => {
-            this._selectedCurrency = currency;
-            rootStore.query.setParamsFromStores({ vs_currency: currency.key })
-        })
-    }
-
-    setSelectedCategory = (category: Option, isResetPage = false): void => {
-        const categoryInSelected = this._selectedCategory.find(item => item.key === category.key)
-        runInAction(() => {
-            if (categoryInSelected) {
-                this._selectedCategory = this._selectedCategory.filter(item => item.key !== category.key);
-            } else {
-                this._selectedCategory = [category];
-            }
-            const params: { category: string, page?: string } =
-                { category: this._selectedCategory.map(item => item.key).join(',') }
-            if (isResetPage) params.page = '1'
-            rootStore.query.setParamsFromStores(params)
-        })
-    }
-
-    setSearchValue = (value: string): void => {
-        this._searchValue = value;
-        runInAction(() => {
-            rootStore.query.setParamsFromStores({ query: value, page: '1' })
-            if (!value) rootStore.query.setParamsFromStores({ ids: '' })
-        })
-    }
-
-    setActiveFeaturedCategory = (value: FEATURED_CATEGORIES, isResetPage = false): void => {
-        const params = isResetPage
-            ? { feature: value, order: '', ids: '', page: '1' } // TODO
-            : { feature: value, order: '', ids: '', }
-        switch (value) {
-            case FEATURED_CATEGORIES.Gainer:
-            case FEATURED_CATEGORIES.Loser:
-                params.order = SORT_TYPES[value]
-                break;
-            default:
-        }
-        runInAction(() => {
-            this._activeFeaturedCategory = value;
-            rootStore.query.setParamsFromStores(params)
-        })
-    }
-
-    setPage = (pageNow: string): void => {
-        runInAction(() => {
-            this._page = pageNow;
-            rootStore.query.setParamsFromStores({ page: pageNow })
-        })
-    }
-
-    async getCategoriesList(isMocked: boolean = false): Promise<void> {
-        this._meta = Meta.loading;
+        this._meta = Meta.success;
+        this._categories = normalizeCollection(categories, (item) => item.categoryId);
+      } catch (e) {
+        this._meta = Meta.error;
+        rootStore.status.setErrorText((e as Error).message);
         this._categories = getInitialCollectionModel();
+      }
+    });
+  }
 
-        const response = await this._apiStore.request<CategoryItemApi[]>({
-            method: HTTPMethod.GET,
-            endpoint: API_ENDPOINTS.CATEGORIES,
-        }, isMocked);
+  async getCurrenciesList(isMocked: boolean = false): Promise<void> {
+    this._meta = Meta.loading;
+    this._currencies = [];
 
-        runInAction(() => {
-            if (!response.status) {
-                this._meta = Meta.error;
-            }
+    const response = await this._apiStore.request<string[]>(
+      {
+        method: HTTPMethod.GET,
+        endpoint: API_ENDPOINTS.CURRENCIES,
+      },
+      isMocked,
+    );
 
-            try {
-                const categories: CategoryItemModel[] = []
-                for (const item of response.data as CategoryItemApi[]) {
-                    categories.push(normalizeCategoryItem(item))
-                }
-                this._meta = Meta.success;
-                this._categories = normalizeCollection(categories, (item) => item.categoryId)
-                return;
-            } catch (e) {
-                this._meta = Meta.error;
-                rootStore.status.setErrorText((e as Error).message)
-                this._categories = getInitialCollectionModel();
-            }
-        })
-    };
+    runInAction(() => {
+      if (!response.status) {
+        this._meta = Meta.error;
+      }
 
-    async getCurrenciesList(isMocked: boolean = false): Promise<void> {
-        this._meta = Meta.loading;
+      try {
+        this._meta = Meta.success;
+        this._currencies = response.data as string[];
+      } catch (e) {
+        this._meta = Meta.error;
+        rootStore.status.setErrorText((e as Error).message);
         this._currencies = [];
+      }
+    });
+  }
 
-        const response = await this._apiStore.request<string[]>({
-            method: HTTPMethod.GET,
-            endpoint: API_ENDPOINTS.CURRENCIES,
-        }, isMocked);
+  // private readonly _urlReaction: IReactionDisposer = reaction(
+  //     () => rootStore.status.isLimitRate,
+  //     (isLimitRate) => {
+  //         if (isLimitRate) {
+  //             this.getCategoriesList(true)
+  //             this.getCurrenciesList(true)
+  //         }
+  //     }
+  // )
 
-        runInAction(() => {
-
-            if (!response.status) {
-                this._meta = Meta.error;
-            }
-
-            try {
-                this._meta = Meta.success;
-                this._currencies = response.data as string[];
-                return;
-            } catch (e) {
-                this._meta = Meta.error;
-                rootStore.status.setErrorText((e as Error).message)
-                this._currencies = [];
-            }
-        })
-    };
-
-    // private readonly _urlReaction: IReactionDisposer = reaction(
-    //     () => rootStore.status.isLimitRate,
-    //     (isLimitRate) => {
-    //         if (isLimitRate) {
-    //             this.getCategoriesList(true)
-    //             this.getCurrenciesList(true)
-    //         }
-    //     }
-    // )
-
-    destroy() {
-        // this._urlReaction()
-    };
-};
+  // eslint-disable-next-line class-methods-use-this
+  destroy(): void {
+    // this._urlReaction()
+  }
+}

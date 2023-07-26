@@ -1,31 +1,24 @@
 import { FC, useContext } from 'react';
 
 import CoinsPage from '../CoinsPage';
-import localStores, { localStoresContext } from '@/store';
 import CoinsHeader from '../CoinsPage/components/CoinsHeader/CoinsHeader';
 
 import st from './Home.module.scss';
 
-export const useStoresContext = () => useContext(localStoresContext);
+import { Provider } from '@/components/LocalStoragesProvider/LocalStoragesProvider';
+import { LocalStores, localStoresContext } from '@/store';
+
+export const useStoresContext = (): LocalStores => useContext(localStoresContext);
 
 const Home: FC = () => {
-
-    const Provider = ({ children }: any) => {
-        return (
-            <localStoresContext.Provider value={localStores}>
-                {children}
-            </localStoresContext.Provider>
-        )
-    };
-
-    return (
-            <div className={st.App}>
-                <Provider>
-                    <CoinsHeader />
-                    <CoinsPage />
-                </Provider>
-            </div>
-    );
+  return (
+    <div className={st.App}>
+      <Provider>
+        <CoinsHeader />
+        <CoinsPage />
+      </Provider>
+    </div>
+  );
 };
 
 export default Home;

@@ -1,31 +1,34 @@
 import { FC } from 'react';
+
 import { observer } from 'mobx-react-lite';
 import { Route, Routes, Navigate } from 'react-router-dom';
 
-import Home from './pages/Home';
 import CoinPage from './pages/CoinPage';
-import Layout from '@/components/Layout';
 import ErrorPage from './pages/ErrorPage';
-import rootStore from '@/store/RootStore/instance';
+import Home from './pages/Home';
+
+import Layout from '@/components/Layout';
 import { useQueryParamsStoreInit } from '@/store/RootStore/hooks/useQueryParamsStoreInit';
+import rootStore from '@/store/RootStore/instance';
 
 const App: FC = () => {
   const error = rootStore.status.errorText;
-  if (error) {
-    return <ErrorPage errorMessage={error}/>
-  };
 
   useQueryParamsStoreInit();
 
+  if (error) {
+    return <ErrorPage errorMessage={error} />;
+  }
+
   return (
     <Routes>
-      <Route path='/' element={<Layout />}>
+      <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path='coins'>
-          <Route path=':id' element={<CoinPage />} />
+        <Route path="coins">
+          <Route path=":id" element={<CoinPage />} />
         </Route>
-        <Route path='/error' element={<ErrorPage/>}/>
-        <Route path='*' element={<Navigate to='/' replace />} />
+        <Route path="/error" element={<ErrorPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
   );

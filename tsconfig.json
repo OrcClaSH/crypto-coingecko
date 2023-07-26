@@ -24,7 +24,8 @@
       "types/*": ["src/@types/*"],
       "public/*": ["public/*"],
       "assets/*": ["assets/*"],
-    },
+      "store/*": ["store/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules"],

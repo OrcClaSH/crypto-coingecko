@@ -1,4 +1,4 @@
-import RootStore from "./RootStore";
+import RootStore from './RootStore';
 
 export { default } from './instance';
 

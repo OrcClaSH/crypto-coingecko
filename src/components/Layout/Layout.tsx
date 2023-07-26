@@ -1,27 +1,27 @@
-import { FC, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { observer } from "mobx-react-lite";
+import { FC, useEffect, useState } from 'react';
 
-import rootStore from "@/store/RootStore/instance";
+import { observer } from 'mobx-react-lite';
+import { Outlet } from 'react-router-dom';
+
 import MockdataInformation from '@/components/MockdataInformation/MockdataInformation';
+import rootStore from '@/store/RootStore/instance';
 
 const Layout: FC = () => {
-    const [isMockedData, setIsMockedData] = useState(false)
-    const isLimitedRate = rootStore.status.isLimitRate
+  const [isMockedData, setIsMockedData] = useState(false);
+  const isLimitedRate = rootStore.status.isLimitRate;
 
-    useEffect(() => {
-        if (isLimitedRate) {
-            setIsMockedData(true)
-        }
+  useEffect(() => {
+    if (isLimitedRate) {
+      setIsMockedData(true);
+    }
+  }, [isLimitedRate]);
 
-    }, [isLimitedRate])
-
-    return (
-        <div className='wrapper'>
-            {isMockedData && <MockdataInformation />}
-            <Outlet />
-        </div>
-    );
+  return (
+    <div className="wrapper">
+      {isMockedData && <MockdataInformation />}
+      <Outlet />
+    </div>
+  );
 };
 
 export default observer(Layout);

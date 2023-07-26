@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import ContentLoader from "react-content-loader"
+
+import ContentLoader from 'react-content-loader';
 
 const Skeleton: FC = () => (
   <ContentLoader
@@ -21,6 +22,6 @@ const Skeleton: FC = () => (
     <circle cx="14" cy="14" r="12" />
     <rect x="18" y="96" rx="0" ry="0" width="354" height="300" />
   </ContentLoader>
-)
+);
 
 export default Skeleton;

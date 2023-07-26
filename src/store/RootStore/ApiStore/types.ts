@@ -1,8 +1,8 @@
 import * as qs from 'qs';
 
 export enum HTTPMethod {
-    GET = 'GET',
-    POST = 'POST',
+  GET = 'GET',
+  POST = 'POST',
 }
 
 export type RequestParams<ReqT> = {
@@ -10,12 +10,18 @@ export type RequestParams<ReqT> = {
   endpoint?: string;
   headers?: Record<string, string>;
   data?: ReqT;
-  params?: Record<string, string | number | boolean | Array<string> | undefined | qs.ParsedQs | qs.ParsedQs[]>;
+  params?: Record<
+    string,
+    string | number | boolean | Array<string> | undefined | qs.ParsedQs | qs.ParsedQs[]
+  >;
 };
 
 export type GetDataParams = {
   endpoint: string;
-  params: Record<string, string | number | boolean | Array<string> | undefined | qs.ParsedQs | qs.ParsedQs[]>;
+  params: Record<
+    string,
+    string | number | boolean | Array<string> | undefined | qs.ParsedQs | qs.ParsedQs[]
+  >;
 };
 
 export enum StatusHTTP {
@@ -45,6 +51,6 @@ export interface IApiStore {
   readonly baseUrl: string;
 
   request<SuccessT, ErrorT = Error, ReqT = Record<string, unknown>>(
-    params: RequestParams<ReqT>
+    params: RequestParams<ReqT>,
   ): Promise<ApiResponse<SuccessT, ErrorT>>;
 }

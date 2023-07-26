@@ -1,49 +1,50 @@
-import { action, computed, makeObservable, observable } from "mobx"
+/* eslint-disable no-underscore-dangle */
+import { action, computed, makeObservable, observable } from 'mobx';
 
-import { API_ENDPOINTS } from "@/config";
+import { API_ENDPOINTS } from '@/config';
 
-type PrivateFields =
-    | '_errorText'
-    | '_isLimitRate'
+type PrivateFields = '_errorText' | '_isLimitRate';
 
 export default class AppStatusStore {
-    private _baseUrl = API_ENDPOINTS.BASE_URL || API_ENDPOINTS.MOCK_URL;
-    private _errorText = '';
-    private _isLimitRate = false;
+  private _baseUrl = API_ENDPOINTS.BASE_URL || API_ENDPOINTS.MOCK_URL;
 
-    constructor() {
-        makeObservable<AppStatusStore, PrivateFields>(this, {
-            _errorText: observable,
-            _isLimitRate: observable,
-            errorText: computed,
-            isLimitRate: computed,
-            setErrorText: action,
-            setIsLimitRate: action,
-            setBaseUrl: action,
-        })
-    };
+  private _errorText = '';
 
-    get errorText() {
-        return this._errorText;
-    };
+  private _isLimitRate = false;
 
-    get isLimitRate() {
-        return this._isLimitRate;
-    }
+  constructor() {
+    makeObservable<AppStatusStore, PrivateFields>(this, {
+      _errorText: observable,
+      _isLimitRate: observable,
+      errorText: computed,
+      isLimitRate: computed,
+      setErrorText: action,
+      setIsLimitRate: action,
+      setBaseUrl: action,
+    });
+  }
 
-    get baseUrl() {
-        return this._baseUrl
-    }
+  get errorText(): string {
+    return this._errorText;
+  }
 
-    setErrorText = (error: string) => {
-        this._errorText = error
-    }
+  get isLimitRate(): boolean {
+    return this._isLimitRate;
+  }
 
-    setIsLimitRate = (status: boolean) => {
-        this._isLimitRate = status;
-    }
+  get baseUrl(): string {
+    return this._baseUrl;
+  }
 
-    setBaseUrl = (url: string) => {
-        this._baseUrl = url;
-    }
-};
+  setErrorText = (error: string): void => {
+    this._errorText = error;
+  };
+
+  setIsLimitRate = (status: boolean): void => {
+    this._isLimitRate = status;
+  };
+
+  setBaseUrl = (url: string): void => {
+    this._baseUrl = url;
+  };
+}

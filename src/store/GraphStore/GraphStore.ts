@@ -1,74 +1,74 @@
-import { action, computed, makeObservable, observable, runInAction } from "mobx";
+/* eslint-disable no-underscore-dangle */
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 
-import ApiStore from "../RootStore/ApiStore";
-import { formationGraphEndpoint } from "@/utils";
-import { ILocalStore } from "@/hooks/useLocalStore";
-import { Meta, TimeRangesEnum } from "@/utils/enums";
-import { normalizeGraphItem } from "../models/graph";
-import { HTTPMethod } from "../RootStore/ApiStore/types";
-import { GraphItemModel, GraphItemApi } from "../models/graph";
+import { normalizeGraphItem, GraphItemModel, GraphItemApi } from '../models/graph';
+import ApiStore from '../RootStore/ApiStore';
+import { HTTPMethod } from '../RootStore/ApiStore/types';
 
-type PrivateFields =
-    | '_meta'
-    | '_graphData'
-    | '_period'
+import { ILocalStore } from '@/hooks/useLocalStore';
+import { formationGraphEndpoint } from '@/utils';
+import { Meta, TimeRangesEnum } from '@/utils/enums';
+
+type PrivateFields = '_meta' | '_graphData' | '_period';
 
 export default class GraphStore implements ILocalStore {
-    private readonly _apiStore = new ApiStore();
-    private _graphData = {} as GraphItemModel;
-    private _meta = Meta.initial;
-    private _period = TimeRangesEnum["1h"];
+  private readonly _apiStore = new ApiStore();
 
-    constructor() {
-        makeObservable<GraphStore, PrivateFields>(this, {
-            _meta: observable,
-            _graphData: observable,
-            _period: observable,
-            meta: computed,
-            graphData: computed,
-            period: computed,
-            getGraphData: action,
-            setPeriod: action,
-        })
-    }
+  private _graphData = {} as GraphItemModel;
 
-    get meta() {
-        return this._meta;
-    }
+  private _meta = Meta.initial;
 
-    get graphData() {
-        return this._graphData;
-    }
+  private _period = TimeRangesEnum['1h'];
 
-    get period() {
-        return this._period;
-    }
+  constructor() {
+    makeObservable<GraphStore, PrivateFields>(this, {
+      _meta: observable,
+      _graphData: observable,
+      _period: observable,
+      meta: computed,
+      graphData: computed,
+      period: computed,
+      getGraphData: action,
+      setPeriod: action,
+    });
+  }
 
-    setPeriod = (period: TimeRangesEnum) => {
-        this._period = period;
-    }
+  get meta(): Meta {
+    return this._meta;
+  }
 
-    async getGraphData(id: string, range: TimeRangesEnum = this._period) {
-        const response = await this._apiStore.request({
-            method: HTTPMethod.GET,
-            endpoint: formationGraphEndpoint(id, range)
-        })
+  get graphData(): GraphItemModel {
+    return this._graphData;
+  }
 
-        runInAction(() => {
-            if (!response.success) {
-                this._meta = Meta.error;
-            }
+  get period(): TimeRangesEnum {
+    return this._period;
+  }
 
-            try {
-                this._graphData = normalizeGraphItem(response.data as GraphItemApi);
-                this._meta = Meta.success;
-            } catch (e) {
-                this._meta = Meta.error;
-            }
-        })
-    }
+  setPeriod = (period: TimeRangesEnum): void => {
+    this._period = period;
+  };
 
-    destroy(): void {
+  async getGraphData(id: string, range: TimeRangesEnum = this._period): Promise<void> {
+    const response = await this._apiStore.request({
+      method: HTTPMethod.GET,
+      endpoint: formationGraphEndpoint(id, range),
+    });
 
-    }
-};
+    runInAction(() => {
+      if (!response.success) {
+        this._meta = Meta.error;
+      }
+
+      try {
+        this._graphData = normalizeGraphItem(response.data as GraphItemApi);
+        this._meta = Meta.success;
+      } catch (e) {
+        this._meta = Meta.error;
+      }
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  destroy(): void {}
+}

@@ -1,72 +1,68 @@
-import {
-    action,
-    computed,
-    makeObservable,
-    observable,
-    runInAction,
-} from "mobx"
+/* eslint-disable no-underscore-dangle */
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 
-import { Meta } from "@/utils/enums"
-import ApiStore from "../RootStore/ApiStore"
-import { ILocalStore } from "@/hooks/useLocalStore"
-import { HTTPMethod } from "../RootStore/ApiStore/types"
 import {
-    CoinDetailApi,
-    CoinDetailModel,
-    normalizeCoinDetail
-} from "../models/coinDetail/coinDetailItem"
+  CoinDetailApi,
+  CoinDetailModel,
+  normalizeCoinDetail,
+} from '../models/coinDetail/coinDetailItem';
+import ApiStore from '../RootStore/ApiStore';
+import { HTTPMethod } from '../RootStore/ApiStore/types';
 
-type PrivateFields = '_coin' | '_meta'
+import { ILocalStore } from '@/hooks/useLocalStore';
+import { Meta } from '@/utils/enums';
+
+type PrivateFields = '_coin' | '_meta';
 
 export default class CoinDetailStore implements ILocalStore {
-    private readonly _apiStore: ApiStore = new ApiStore()
-    private _coin = {} as CoinDetailModel
-    private _meta = Meta.initial
+  private readonly _apiStore: ApiStore = new ApiStore();
 
-    constructor() {
-        makeObservable<CoinDetailStore, PrivateFields>(this, {
-            _coin: observable.ref,
-            _meta: observable,
-            coin: computed,
-            meta: computed,
-            getCoin: action,
-        })
-    }
+  private _coin = {} as CoinDetailModel;
 
-    get meta(): Meta {
-        return this._meta
-    }
+  private _meta = Meta.initial;
 
-    get coin(): CoinDetailModel {
-        return this._coin
-    }
+  constructor() {
+    makeObservable<CoinDetailStore, PrivateFields>(this, {
+      _coin: observable.ref,
+      _meta: observable,
+      coin: computed,
+      meta: computed,
+      getCoin: action,
+    });
+  }
 
-    async getCoin(id: string) {
-        this._meta = Meta.loading
+  get meta(): Meta {
+    return this._meta;
+  }
 
-        const response = await this._apiStore.request<CoinDetailApi>({
-            method: HTTPMethod.GET,
-            endpoint: `/coins/${id}?sparkline=true`,
-        })
+  get coin(): CoinDetailModel {
+    return this._coin;
+  }
 
-        runInAction(() => {
-            if (!response.success) {
-                this._meta = Meta.error
-            }
+  async getCoin(id: string): Promise<void> {
+    this._meta = Meta.loading;
 
-            try {
-                this._coin = normalizeCoinDetail(response.data as CoinDetailApi)
-                this._meta = Meta.success
-            } catch (e) {
-                console.log('[ERROR', e) //TODO delete
-                this._meta = Meta.error
-                this._coin = {} as CoinDetailModel
-            }
-        })
+    const response = await this._apiStore.request<CoinDetailApi>({
+      method: HTTPMethod.GET,
+      endpoint: `/coins/${id}?sparkline=true`,
+    });
 
-    }
+    runInAction(() => {
+      if (!response.success) {
+        this._meta = Meta.error;
+      }
 
-    destroy(): void {
+      try {
+        this._coin = normalizeCoinDetail(response.data as CoinDetailApi);
+        this._meta = Meta.success;
+      } catch (e) {
+        console.log('[ERROR', e); // TODO delete
+        this._meta = Meta.error;
+        this._coin = {} as CoinDetailModel;
+      }
+    });
+  }
 
-    }
+  // eslint-disable-next-line class-methods-use-this
+  destroy(): void {}
 }
